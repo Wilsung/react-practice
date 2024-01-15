@@ -7,6 +7,15 @@
     <title>React Tic-Tac-Toe</title>
   </head>
   <body>
+    <!-- Can still add static HTML tags here. Doesn't always need to be a React Component
+     we don't need to add image path since itll be bundled in the end. e.g. ./public/game-logo.png 
+    ./public does not need a build process so only general images are favored here. Components still need to be referenced.
+    -->
+    <header>
+      <img src="game-logo.png" alt="TTT game-board"/>
+      <h1>Tic-Tac-Toe</h1>
+    </header>
+
     <div id="root"></div>
     <script type="module" src="/src/index.jsx"></script>
   </body>
