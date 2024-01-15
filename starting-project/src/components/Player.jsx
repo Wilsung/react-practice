@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function Player ( {initialName, symbol} ) {
+export default function Player ( {initialName, symbol, isActive } ) {
     const [ playerName, setPlayerName ] = useState(initialName);
     const [ isEditing, setIsEditing ] = useState(false);
 
@@ -13,7 +13,7 @@ export default function Player ( {initialName, symbol} ) {
         setIsEditing((editing) => !(editing));
     }
 
-    //even is used from onChange (built-in process) -recording user keystrokes.
+    //event is used from onChange (built-in process) -recording user keystrokes.
     function handleNameChange (event){
         setPlayerName(event.target.value);
     }
@@ -29,7 +29,7 @@ export default function Player ( {initialName, symbol} ) {
     }
 
     return (
-        <li>
+        <li className={isActive ? "active" : undefined}>
         <span className="player">
             {editablePlayerName}
             <span className="player-symbol">{symbol}</span>
