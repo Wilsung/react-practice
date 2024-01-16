@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function Player ( {initialName, symbol, isActive } ) {
+export default function Player ( {initialName, symbol, isActive, onNameChange } ) {
     const [ playerName, setPlayerName ] = useState(initialName);
     const [ isEditing, setIsEditing ] = useState(false);
 
@@ -11,6 +11,9 @@ export default function Player ( {initialName, symbol, isActive } ) {
 
         //do this. this gets latest state value.
         setIsEditing((editing) => !(editing));
+        if (isEditing){
+            onNameChange(symbol, playerName);
+        }
     }
 
     //event is used from onChange (built-in process) -recording user keystrokes.
