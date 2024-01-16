@@ -1,13 +1,10 @@
 export default function Log ( {turns} ){
-    
-    for (const turn of turns){
-        const { square, player } = turn;
-        const { row, col } = square;
-
-        gameBoard[row][col] = player;
-    }
 
     return (
-        <div>hi</div>
+        <ol id="log">
+        {turns.map((turn) => (
+        <li key={`${turn.square.row}${turn.square.col}`}>{turn.player} is at {turn.square.row},{turn.square.col}</li>
+        ))}
+        </ol>
     );
 }

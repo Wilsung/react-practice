@@ -1,22 +1,31 @@
 
 import Player from './components/Player';
 import GameBoard from './components/GameBoard';
-import Log from './components/Log'
+import Log from './components/Log';
+import { WINNING_COMBINATIONS } from './winning_combinations.js';
 import { useState } from 'react';
-//testing push
+
+function deriveActivePlayer(prevTurns){
+  let activecurrentPlayer = 'X';
+
+  if (prevTurns.length > 0 && prevTurns[0].player === 'X') {
+    activecurrentPlayer = 'O';
+  }
+
+  return activecurrentPlayer;
+}
+
 function App() {
   const [ gameTurns, setGameTurns ] = useState([]);
-  const [ activePlayer, setActivePlayer ] = useState("X");
+  // const [ activePlayer, setActivePlayer ] = useState("X");
+
+  let activePlayer = deriveActivePlayer(gameTurns);
 
   function handleActivePlayer (rowIndex, colIndex){
-    setActivePlayer( (currentActivePlayer) => currentActivePlayer === "X" ? "O" : "X");
+    // setActivePlayer( (currentActivePlayer) => currentActivePlayer === "X" ? "O" : "X");
 
     setGameTurns(prevTurns => {
-      let currentPlayer = 'X';
-
-      if (prevTurns.length > 0 && prevTurns[0].player === 'X') {
-        currentPlayer = 'O';
-      }
+      const currentPlayer = deriveActivePlayer(prevTurns);
 
       const updatedTurns = [
         //we don't do player: activePlayer to avoid using another state when updating this state.
