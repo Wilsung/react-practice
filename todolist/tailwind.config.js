@@ -5,9 +5,10 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
-    colors: {
-      black: '#111827',
+    extend: {
+      fontFamily: {
+        title: ['"Pacifico"', 'cursive']
+      }
     },
   },
   plugins: [],
