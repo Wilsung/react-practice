@@ -30,7 +30,7 @@ export default function Sidebar({
             }
             return (
               <li key={project.id}>
-                <button onClick={() => onSelectProject(project.id)}>{project.title}</button>
+                <button className={cssClasses} onClick={() => onSelectProject(project.id)}>{project.title}</button>
               </li>
             );
           })}
