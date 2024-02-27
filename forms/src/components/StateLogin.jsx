@@ -1,29 +1,62 @@
-import { useState } from 'react';
+import { useState } from "react";
+import Input from "./Input";
+import {
+  isEmail,
+  isNotEmpty,
+  hasMinLength,
+  isEqualsToOtherValue,
+} from "../util/validation";
+import { useInput } from "./hooks/useInput";
 
-export default function StateLogin () {
-    const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    password: "",
+export default function StateLogin() {
+  const {
+    value: emailValue,
+    handleInputChange: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+    hasError: emailHasError,
+  } = useInput("", (value) => {
+    return isEmail(value) && isNotEmpty(value);
+  });
+
+  const {
+    value: passwordValue,
+    handleInputChange: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    hasError: passwordHasError,
+  } = useInput("", (value) => {
+    return hasMinLength(value, 6) 
   });
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(enteredEmail, enteredPassword)
   }
-    return (
-      <form onSubmit={handleSubmit}>
+
+  return (
+    <form onSubmit={handleSubmit}>
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input id="email" type="email" name="email" ref={email} />
-        </div>
+        <Input
+          label="Email"
+          id="email"
+          type="email"
+          name="email"
+          onBlur={handleEmailBlur}
+          value={emailValue}
+          onChange={handleEmailChange}
+          error={emailHasError && "Please enter valid email."}
+        />
 
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" ref={password} />
-        </div>
+        <Input
+          label="Password"
+          id="password"
+          type="password"
+          name="password"
+          onBlur={handlePasswordBlur}
+          value={passwordValue}
+          onChange={handlePasswordChange}
+          error={passwordHasError && "Please enter valid password."}
+        />
       </div>
 
       <p className="form-actions">
@@ -31,5 +64,5 @@ export default function StateLogin () {
         <button className="button">Login</button>
       </p>
     </form>
-    );
+  );
 }
