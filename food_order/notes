@@ -1,0 +1,2 @@
+Could have just passes items to the context in the parameter 
+instead of adding to context itself.
