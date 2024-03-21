@@ -7,8 +7,12 @@ export default function Cart({ items, totalPrice }) {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
 
+
+  function handleClose(){
+    userProgressCtx.hideCart();
+  }
   return (
-    <Modal className="cart" open={userProgressCtx.progress === "cart"}>
+    <Modal className="cart" open={userProgressCtx.progress === "cart"} onClose={userProgressCtx.progress === "cart" ? handleClose : null}>
       <h2>Your Cart</h2>
       {cartCtx.items.length > 0 && (
         <ul>
@@ -37,10 +41,14 @@ export default function Cart({ items, totalPrice }) {
       )}
       <p className="cart-total">${totalPrice}</p>
       <p className="modal-actions">
-        <button className="text-button" onClick={userProgressCtx.hideCart}>Close</button>
-        <button className="button" onClick={userProgressCtx.showCheckout}>
-          Checkout
+        <button className="text-button" onClick={userProgressCtx.hideCart}>
+          Close
         </button>
+        {cartCtx.items.length > 0 && (
+          <button className="button" onClick={userProgressCtx.showCheckout}>
+            Checkout
+          </button>
+        )}
       </p>
     </Modal>
   );
