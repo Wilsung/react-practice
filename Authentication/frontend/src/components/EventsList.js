@@ -1,11 +1,14 @@
-import classes from './EventsList.module.css';
+// import { useLoaderData } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-function EventsList({ events }) {
+import classes from './EventsList.module.css';
+
+function EventsList({events}) {
+  // const events = useLoaderData();
+
   return (
     <div className={classes.events}>
       <h1>All Events</h1>
-      <p>Sample url: https://cdn.mos.cms.futurecdn.net/HdD8pngF8jQNHGtUxdjZ2o.jpg</p>
       <ul className={classes.list}>
         {events.map((event) => (
           <li key={event.id} className={classes.item}>

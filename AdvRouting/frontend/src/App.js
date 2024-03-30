@@ -20,8 +20,67 @@
 // 7. Output the ID of the selected event on the EventDetailPage
 // BONUS: Add another (nested) layout route that adds the <EventNavigation> component above all /events... page components
 
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import EventsPage, { loader as eventsLoader } from "./pages/EventsPage";
+import EventDetailPage, {
+  loader as eventDetailLoader,
+  action as eventDeleteAction,
+} from "./pages/EventDetailPage";
+import RootLayout from "./pages/RootLayout";
+import NewEventPage from "./pages/NewEventPage";
+import EditEventPage from "./pages/EditEventPage";
+import EventRootLayout from "./pages/EventRootLayout";
+import ErrorPage from "./pages/Error";
+import { action as manipulateAction } from './components/EventForm'
+import NewsletterPage, { action as newsletterAction } from './pages/Newsletter';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: "/events",
+        element: <EventRootLayout />,
+        children: [
+          {
+            index: true,
+            element: <EventsPage />,
+            loader: eventsLoader,
+          },
+          {
+            path: "/events/:eventId",
+            id: "event-detail",
+            loader: eventDetailLoader,
+            children: [
+              {
+                index: true,
+                element: <EventDetailPage />,
+                action: eventDeleteAction,
+              },
+              { path: "/events/:eventId/edit", element: <EditEventPage />, action: manipulateAction, },
+            ],
+          },
+          {
+            path: "/events/new",
+            element: <NewEventPage />,
+            action: manipulateAction,
+          },
+        ],
+      },
+      {
+        path: 'newsletter',
+        element: <NewsletterPage />,
+        action: newsletterAction,
+      },
+    ],
+  },
+]);
 function App() {
-  return <div></div>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
