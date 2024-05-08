@@ -11,7 +11,7 @@ export default function AvailableMeals() {
     async function fetchAvailableMeals() {
       setIsFetching(true);
       try {
-        const response = await fetch("http://localhost:3000/meals");
+        const response = await fetch("https://reduxpractice-55a4e-default-rtdb.firebaseio.com/available-meals.json");
         const resData = await response.json();
         setMeals(resData);
       } catch (error) {

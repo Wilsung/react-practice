@@ -16,21 +16,19 @@ export default function CheckoutModal({ totalPrice, items }) {
     const customer = Object.fromEntries(fd.entries());
 
     try {
-      const response = await fetch("http://localhost:3000/orders", {
-        method: "POST",
+      const response = await fetch("https://reduxpractice-55a4e-default-rtdb.firebaseio.com/orders.json", {
+        method: "PUT",
         body: JSON.stringify({
           order: {
             items: items,
             customer
           },
         }),
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
       const resData = await response.json();
 
+      console.log(resData)
       if (!response.ok) {
         throw new Error("Failed to update user data.");
       }

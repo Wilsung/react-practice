@@ -1,103 +1,86 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer } from 'react';
 
-export const CartContext = createContext({
-  addMealToCart: () => {},
-  updateCartMealQuantity: () => {},
+const CartContext = createContext({
   items: [],
+  addItem: (item) => {},
+  removeItem: (id) => {},
+  clearCart: () => {},
 });
 
-function shoppingCartReducer(state, action) {
-  if (action.type === "ADD_MEAL") {
+function cartReducer(state, action) {
+  if (action.type === 'ADD_ITEM') {
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
+
     const updatedItems = [...state.items];
 
-    const existingCartItemIndex = updatedItems.findIndex((cartItem) => cartItem.id === action.meal.id);
-
-    const existingCartItem = updatedItems[existingCartItemIndex];
-    if (existingCartItem) {
-      
+    if (existingCartItemIndex > -1) {
+      const existingItem = state.items[existingCartItemIndex];
       const updatedItem = {
-        ...existingCartItem,
-        quantity: existingCartItem.quantity + 1,
+        ...existingItem,
+        quantity: existingItem.quantity + 1,
       };
       updatedItems[existingCartItemIndex] = updatedItem;
     } else {
-      updatedItems.push({
-        id: action.meal.id,
-        name: action.meal.name,
-        price: +action.meal.price,
-        quantity: 1,
-      });
+      updatedItems.push({ ...action.item, quantity: 1 });
     }
-    return {
-      ...state,
-      items: updatedItems,
-    };
+
+    return { ...state, items: updatedItems };
   }
 
-  if (action.type === "UPDATE_MEAL") {
+  if (action.type === 'REMOVE_ITEM') {
+    const existingCartItemIndex = state.items.findIndex(
+      (item) => item.id === action.id
+    );
+    const existingCartItem = state.items[existingCartItemIndex];
+
     const updatedItems = [...state.items];
-    const updatedItemIndex = updatedItems.findIndex(item => item.id === action.payload);
-    const updateItem = { ...updatedItems[updatedItemIndex]};
-    if (updateItem){
-        updateItem.quantity += action.amount;
-        if (updateItem.quantity <=0){
-          updatedItems.splice(updatedItemIndex,1);
-        }else{
-          updatedItems[updatedItemIndex] = updateItem;
-        }
-      
+
+    if (existingCartItem.quantity === 1) {
+      updatedItems.splice(existingCartItemIndex, 1);
+    } else {
+      const updatedItem = {
+        ...existingCartItem,
+        quantity: existingCartItem.quantity - 1,
+      };
+      updatedItems[existingCartItemIndex] = updatedItem;
     }
 
-    return {
-      ...state,
-      items: updatedItems,
-    }
+    return { ...state, items: updatedItems };
   }
 
-  if (action.type === "SET_MEAL") {
-    return {
-      ...state,
-      availableMeals: action.meals,
-    };
+  if (action.type === 'CLEAR_CART') {
+    return { ...state, items: [] };
   }
+
+  return state;
 }
 
 export function CartContextProvider({ children }) {
-  const [shoppingCartState, shoppingCartDispatch] = useReducer(
-    shoppingCartReducer,
-    { items: [] }
-  );
+  const [cart, dispatchCartAction] = useReducer(cartReducer, { items: [] });
 
-  function handleAddMealToCart(meal) {
-    shoppingCartDispatch({
-      type: "ADD_MEAL", //key could be named anything.
-      meal, //this the likely the parameter.
-    });
+  function addItem(item) {
+    dispatchCartAction({ type: 'ADD_ITEM', item });
   }
 
-  function handleUpdateCartMealQuantity(id, amount) {
-    shoppingCartDispatch({
-      type: "UPDATE_MEAL",
-      payload: id,
-      amount: amount,
-    });
-  }
-  function handleSetMeals(meals) {
-    shoppingCartDispatch({
-      type: "SET_MEAL",
-      meals,
-    });
+  function removeItem(id) {
+    dispatchCartAction({ type: 'REMOVE_ITEM', id });
   }
 
-  const ctxValue = {
-    addMealToCart: handleAddMealToCart,
-    updateCartMealQuantity: handleUpdateCartMealQuantity,
-    setMeals: handleSetMeals,
-    items: shoppingCartState.items,
+  function clearCart() {
+    dispatchCartAction({ type: 'CLEAR_CART' });
+  }
+
+  const cartContext = {
+    items: cart.items,
+    addItem,
+    removeItem,
+    clearCart
   };
 
   return (
-    <CartContext.Provider value={ctxValue}>{children}</CartContext.Provider>
+    <CartContext.Provider value={cartContext}>{children}</CartContext.Provider>
   );
 }
 

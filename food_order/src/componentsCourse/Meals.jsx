@@ -9,7 +9,7 @@ export default function Meals() {
   const cartCtx = useContext(CartContext);
   const [ meals, setMeals ] = useState([]);
 
-  const {data: loadedMeals, isLoading, error} = useHttp('http://localhost:3000/meals', requestConfig, []);
+  const {data: loadedMeals, isLoading, error} = useHttp('https://reduxpractice-55a4e-default-rtdb.firebaseio.com/available-meals.json', requestConfig, []);
 
   // useEffect(() => {
   //   async function fetchAvailableMeals() {
@@ -44,14 +44,14 @@ export default function Meals() {
           <li key={meal.id}>
             <article className="meal-item">
               <div>
-                <img src={`http://localhost:3000/${meal.image}`} alt={meal.name} />
+                <img src={`https://storage.googleapis.com/reduxpractice-55a4e.appspot.com/${meal.image}`} alt={meal.name} />
                 <div>
                   <h3>{meal.name}</h3>
                   <p className="meal-item-price">${meal.price}</p>
                   <p className="meal-item-description">{meal.description}</p>
                 </div>
                 <p className="meal-item-actions">
-                  <button className="button" onClick={() => cartCtx.addMealToCart(meal)}>
+                  <button className="button" onClick={() => cartCtx.addItem(meal)}>
                     Add to Cart
                   </button>
                 </p>
