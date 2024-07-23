@@ -19,7 +19,7 @@ export default function Header() {
       <header id="main-header">
         <div id="title">
           <img src={logo} alt="Restaurant logo." />
-          <h1>FoodCart Demo</h1>
+          <h1>Food Shopping Cart</h1>
         </div>
         <button className="text-button" onClick={handleCartOpenClick}>
           Cart ({items.length})
