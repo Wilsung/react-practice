@@ -1,26 +1,15 @@
-import Header from "./components/Header";
-import HeaderCourse from './componentsCourse/Header.jsx';
-import AvailableMeals from "./components/AvailableMeals.jsx";
-import Meals from './componentsCourse/Meals.jsx'
-// import CartContextProvider from "./store/shoppingcart-context.jsx";
+import Header from './components/Header.jsx';
+import Meals from './components/Meals.jsx'
 import { CartContextProvider } from "./store/CartContextProvider.jsx";
 import { UserProgressContextProvider } from "./store/UserProgressContext.jsx";
-import Cart from "./componentsCourse/Cart.jsx";
-import Checkout from "./componentsCourse/Checkout.jsx";
+import Cart from "./components/Cart.jsx";
+import Checkout from "./components/Checkout.jsx";
 
 function App() {
   return (
-      // <CartContextProvider>
-      //   <Header />
-      //   <AvailableMeals />
-      // </CartContextProvider>
-
-
-    // Course Components
-    ////////////////////
     <UserProgressContextProvider>
       <CartContextProvider>
-        <HeaderCourse />
+        <Header />
         <Meals />
         <Cart />
         <Checkout />

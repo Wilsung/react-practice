@@ -1,19 +1,65 @@
-import Meal from "./Meal.jsx"
+import { useState, useEffect, useContext } from "react";
+import CartContext from "../store/CartContextProvider";
+import useHttp from "./hooks/useHttp";
+import Error from "./Error";
 
-export default function Meals({ meals, isLoading, isFetching, loadingText, fallbackText }){
-    return (
-        <section>
-            {isLoading && <h1>{loadingText}</h1>}
-            {!isLoading && meals.length === 0 && <h1>{fallbackText}</h1>}
-            {!isLoading && meals.length > 0 && (
-                <ul id="meals">
-                    {meals.map(meal => (
-                        <li key={meal.id}>
-                            <Meal {...meal}/>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </section>
-    )
+const requestConfig = {};
+export default function Meals() {
+  const [isFetching, setIsFetching] = useState(false);
+  const cartCtx = useContext(CartContext);
+  const [ meals, setMeals ] = useState([]);
+
+  const {data: loadedMeals, isLoading, error} = useHttp('https://reduxpractice-55a4e-default-rtdb.firebaseio.com/available-meals.json', requestConfig, []);
+
+  // useEffect(() => {
+  //   async function fetchAvailableMeals() {
+  //     setIsFetching(true);
+  //     try {
+  //       const response = await fetch("http://localhost:3000/meals");
+  //       const resData = await response.json();
+  //       setMeals(resData);
+  //     } catch (error) {
+  //       setError({
+  //         message: error.message || "Failed fetching available meals.",
+  //       });
+  //     }
+  //     setIsFetching(false);
+  //   }
+
+  //   fetchAvailableMeals();
+  // }, []);
+
+  if (isLoading){
+    return <p className="center">Fetching meals...</p>
+  }
+
+  if (error){
+    return <Error title='failed to fetch meals' message={error}/>
+  }
+
+  return (
+    <>
+      <ul id="meals">
+        {loadedMeals.map((meal) => (
+          <li key={meal.id}>
+            <article className="meal-item">
+              <div>
+                <img src={`https://storage.googleapis.com/reduxpractice-55a4e.appspot.com/${meal.image}`} alt={meal.name} />
+                <div>
+                  <h3>{meal.name}</h3>
+                  <p className="meal-item-price">${meal.price}</p>
+                  <p className="meal-item-description">{meal.description}</p>
+                </div>
+                <p className="meal-item-actions">
+                  <button className="button" onClick={() => cartCtx.addItem(meal)}>
+                    Add to Cart
+                  </button>
+                </p>
+              </div>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
 }
